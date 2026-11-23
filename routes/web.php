@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ClassroomController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
@@ -20,14 +18,33 @@ Route::get('/layout', function () {
     return view('layout');
 });
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+Route::prefix('admin')
+    ->group(function () {
+        // STUDENT
+        Route::get('/student', [StudentController::class, 'index'])
+            ->name('admin.student.index');
 
-Route::get('/admin/about', [AboutController::class, 'index']);
+        Route::post('/student', [StudentController::class, 'store'])
+            ->name('admin.student.store');
 
-Route::resource('/admin/students', StudentController::class);
+        // CLASSROOM
+        Route::get('/classroom', [ClassroomController::class, 'index'])
+            ->name('admin.classroom.index');
 
-Route::get('/admin/classroom', [ClassroomController::class, 'index']);
+        Route::post('/classroom', [ClassroomController::class, 'store'])
+            ->name('admin.classroom.store');
 
-Route::get('/admin/teachers', [TeacherController::class, 'index'])->name('teachers.index');
+        // TEACHER
+        Route::get('/teachers', [TeacherController::class, 'index'])
+            ->name('admin.teacher.index');
 
-Route::get('/admin/subjects', [SubjectController::class, 'index'])->name('subjects.index');
+        Route::post('/teachers', [TeacherController::class, 'store'])
+            ->name('admin.teacher.store');
+
+        // SUBJECT
+        Route::get('/subjects', [SubjectController::class, 'index'])
+            ->name('admin.subject.index');
+
+        Route::post('/subjects', [SubjectController::class, 'store'])
+            ->name('admin.subject.store');
+    });

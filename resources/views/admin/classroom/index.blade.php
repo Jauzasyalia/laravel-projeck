@@ -1,8 +1,25 @@
 <x-admin.layout>
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $title }}</h1>
-        <p class="text-gray-700 dark:text-gray-400">Daftar data kelas</p>
+
+    {{-- Header --}}
+    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $title }}</h1>
+            <p class="text-gray-700 dark:text-gray-400">Daftar data kelas</p>
+        </div>
+
+        <button type="button" data-open-modal="createClassroomModal"
+            class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <svg class="mr-2 h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+            </svg>
+            Tambah Kelas
+        </button>
     </div>
+
+    {{-- Modal Tambah Data Kelas --}}
+    @include('admin.classroom.create')
+
+    <x-admin.alert />
 
     <div class="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
         <div class="overflow-x-auto">
@@ -22,9 +39,11 @@
                             <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{{ $classroom->name }}</td>
                             <td class="px-4 py-3">{{ $classroom->major }}</td>
                             <td class="px-4 py-3">
-                                @foreach ($classroom->students as $student)
+                                @forelse ($classroom->students as $student)
                                     {{ $student->name }} <br>
-                                @endforeach
+                                @empty
+                                    <span class="text-gray-400">Belum ada siswa</span>
+                                @endforelse
                             </td>
                         </tr>
                     @empty
@@ -34,6 +53,10 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <div class="p-4 text-sm text-gray-500 dark:text-gray-400">
+            Total: <span class="font-semibold text-gray-900 dark:text-white">{{ count($classrooms) }}</span> classrooms
         </div>
     </div>
 </x-admin.layout>
